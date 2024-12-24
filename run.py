@@ -2,6 +2,7 @@ import os
 import argparse
 import random
 import numpy as np
+from datetime import datetime
 import torch
 import torch.distributed as dist
 from exp.exp_forecast import Exp_Forecast
@@ -29,6 +30,7 @@ if __name__ == '__main__':
     parser.add_argument('--output_token_len', type=int, default=96, help='output token length')
     parser.add_argument('--test_seq_len', type=int, default=672, help='test seq len')
     parser.add_argument('--test_pred_len', type=int, default=96, help='test pred len')
+    parser.add_argument('--inverse', action='store_true', help='inverse output data', default=False)
 
     # model define
     parser.add_argument('--dropout', type=float, default=0.1, help='dropout')
@@ -133,6 +135,7 @@ if __name__ == '__main__':
                 args.n_heads,
                 args.cosine,
                 args.des, ii)
+            setting = datetime.now().strftime("%y-%m-%d_%H-%M-%S") + setting
             print('>>>>>>>start training : {}>>>>>>>>>>>>>>>>>>>>>>>>>>'.format(setting))
             exp.train(setting)
             print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
@@ -158,6 +161,7 @@ if __name__ == '__main__':
             args.n_heads,
             args.cosine,
             args.des, ii)
+        setting = datetime.now().strftime("%y-%m-%d_%H-%M-%S") + setting
         exp = Exp(args)  # set experiments
         exp.test(setting, test=1)
         torch.cuda.empty_cache()

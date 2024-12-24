@@ -251,11 +251,15 @@ class Exp_Forecast(Exp_Basic):
                 
                 outputs = pred_y.detach().cpu()
                 batch_y = batch_y.detach().cpu()
+                if test_data.scale and self.args.inverse:
+                    shape = outputs.shape
+                    outputs = test_data.inverse_transform(outputs.reshape(shape[0] * shape[1], -1)).reshape(shape)
+                    batch_y = test_data.inverse_transform(batch_y.reshape(shape[0] * shape[1], -1)).reshape(shape)
                 pred = outputs
                 true = batch_y
-
-                preds.append(pred)
-                trues.append(true)
+                
+                preds.append(torch.Tensor(pred))
+                trues.append(torch.Tensor(true))
                 if (i + 1) % 100 == 0:
                     if (self.args.ddp and self.args.local_rank == 0) or not self.args.ddp:
                         speed = (time.time() - time_now) / iter_count

@@ -4,12 +4,14 @@ token_num=30
 token_len=96
 seq_len=$[$token_num*$token_len]
 
+#/data/qiuyunzhong/Training-LTSM/dataset/XYZC_electricity_price_forecast/预测负荷预测备用日前价格合并数据.csv
+
 python -u run.py \
   --task_name forecast \
   --is_training 1 \
-  --root_path ../tslib/dataset/ETT-small/ \
-  --data_path ETTh1.csv \
-  --model_id ETTh1_full_shot \
+  --root_path ./dataset/XYZC/ \
+  --data_path XYZC_forecast.csv \
+  --model_id XYZC_full_shot \
   --model $model_name \
   --data UnivariateDatasetBenchmark  \
   --seq_len $seq_len \
@@ -28,5 +30,7 @@ python -u run.py \
   --tmax 10 \
   --use_norm \
   --adaptation \
+  --covariate \
+  --visualize \
   --pretrain_model_path checkpoints/timerxl_checkpoint.pth
 #  --pretrain_model_path checkpoints/timer_xl/checkpoint.pth
