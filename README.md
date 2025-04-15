@@ -1,15 +1,14 @@
 # OpenLTM
 
-> [!NOTE]
-> OpenLTM is a open codebase intending to collect prevailing **architectures** of large time-series models. It is not intended for checkpoint reproduction. We aim to provide a pipeline to develop and evaluate large time-series models, covering three tasks: **supervised training**, **large-scale pre-training**, and **adaptation**.
+OpenLTM is a open codebase aiming to provide a pipeline to develop and evaluate large time-series models.
 
 > For deep time series models and task-specific benchmarks, we recommend [Time-Series-Library](https://github.com/thuml/Time-Series-Library) and this comprehensive [Survey](https://arxiv.org/abs/2407.13278).
 
-:triangular_flag_on_post: **News** (2025.03) Many thanks for the implementation of [TTMs](https://arxiv.org/pdf/2401.03955) from [frndtls](https://github.com/frndtls).
+:triangular_flag_on_post: **News** (2025.04) Many thanks for the implementation of [TTMs](https://arxiv.org/pdf/2401.03955) and other LLM4TS methods from [frndtls](https://github.com/frndtls).
 
 :triangular_flag_on_post: **News** (2024.12) Many thanks for the implementation of [GPT4TS](https://arxiv.org/abs/2302.11939) from [khairulislam](https://github.com/khairulislam).
 
-:triangular_flag_on_post: **News** (2024.10) We include five large time-series models, release pre-training logic, and provide scripts.
+:triangular_flag_on_post: **News** (2024.10) We include several large time-series models, release pre-training code, and provide scripts.
 
 ## What is LTM
 
@@ -24,9 +23,9 @@ LTM (**L**arge **T**ime-Series **M**odel) is a series of scalable deep models bu
 - [x] **Moment** - MOMENT: A Family of Open Time-series Foundation Model. [[ICML 2024]](https://arxiv.org/abs/2402.03885), [[Code]](https://github.com/moment-timeseries-foundation-model/moment)
 - [x] **TTMs** - Tiny Time Mixers (TTMs): Fast Pre-trained Models for Enhanced Zero/Few-Shot Forecasting of Multivariate Time Series. [[Arxiv 2024]](https://arxiv.org/pdf/2401.03955), [[Code]](https://huggingface.co/ibm-research/ttm-research-r2)
 - [x] **GPT4TS** - One Fits All: Power General Time Series Analysis by Pretrained LM. [[NeurIPS 2023]](https://arxiv.org/abs/2302.11939), [[Code]](https://github.com/DAMO-DI-ML/NeurIPS2023-One-Fits-All)
-- [ ] AutoTimes: Autoregressive Time Series Forecasters via Large Language Models. [[NeurIPS 2024]](https://arxiv.org/abs/2402.02370), [[Code]](https://github.com/thuml/AutoTimes)
+- [x] **Time-LLM**: . Time-LLM: Time Series Forecasting by Reprogramming Large Language Models. [[ICLR 2024]](https://arxiv.org/abs/2310.01728), [[Code]](https://github.com/KimMeen/Time-LLM)
+- [x] **AutoTimes**: Autoregressive Time Series Forecasters via Large Language Models. [[NeurIPS 2024]](https://arxiv.org/abs/2402.02370), [[Code]](https://github.com/thuml/AutoTimes)
 - [ ] LLMTime: Large Language Models Are Zero-Shot Time Series Forecasters. [[NeurIPS 2023]](https://arxiv.org/abs/2310.07820), [[Code]](https://github.com/ngruver/llmtime)
-- [ ] Time-LLM: . Time-LLM: Time Series Forecasting by Reprogramming Large Language Models. [[ICLR 2024]](https://arxiv.org/abs/2310.01728), [[Code]](https://github.com/KimMeen/Time-LLM)
 - [ ] Chronos: Learning the Language of Time Series. [[TMLR 2024]](https://arxiv.org/abs/2403.07815), [[Code]](https://github.com/amazon-science/chronos-forecasting)
 - [ ] Time-MoE: Billion-Scale Time Series Foundation Models With Mixture Of Experts. [[ICLR 2025]](https://arxiv.org/abs/2409.16040), [[Code]](https://github.com/Time-MoE/Time-MoE)
 - [ ] A Decoder-Only Foundation Model for Time-Series Forecasting. [[ICML 2024]](https://arxiv.org/abs/2310.10688), [[Code]](https://github.com/google-research/timesfm)
@@ -42,7 +41,7 @@ pip install -r requirements.txt
 
 2. Place downloaded data in the folder ```./dataset```. Here is a [dataset summary](./figures/datasets.png).
 
-- For pre-training:
+- For univariate pre-training:
   * [UTSD](https://huggingface.co/datasets/thuml/UTSD) contains 1 billiion time points for large-scale pre-training (in numpy format): [[Download]](https://cloud.tsinghua.edu.cn/f/93868e3a9fb144fe9719/
 ).
   * [ERA5-Familiy](https://www.ecmwf.int/en/forecasts/dataset/ecmwf-reanalysis-v5) (40-year span, thousands of variables) for domain-specific model: [[Download]](https://cloud.tsinghua.edu.cn/f/7fe0b95032c64d39bc4a/).
@@ -50,7 +49,7 @@ pip install -r requirements.txt
 - For superwised training or modeling adaptation
   * Datasets from [TSLib](https://github.com/thuml/Time-Series-Library) : [[Download]](https://cloud.tsinghua.edu.cn/f/4d83223ad71047e28aec/).
 
-3. We provide pre-training and adaptation scripts under the folder `./scripts/`. You can conduct experiments using the following examples:
+1. We provide some supervised training, pre-training and adaptation scripts under the folder `./scripts/`:
 
 ```
 # Supervised training
@@ -78,7 +77,7 @@ bash ./scripts/adaptation/few_shot/timer_xl_etth1.sh
 - Include the newly added model in the `Exp_Basic.model_dict` of  `./exp/exp_basic.py`.
 - Create the corresponding scripts under the folder `./scripts`.
 
-5. Or evaluate the zero-shot performance of large time-series models. Here we list some resources:
+To evaluate zero-shot forecasting of large time-series models. Here we list some resources:
 - Chronos: https://huggingface.co/amazon/chronos-t5-base
 - Moirai: https://huggingface.co/Salesforce/moirai-1.0-R-base
 - TimesFM: https://huggingface.co/google/timesfm-1.0-200m
@@ -87,7 +86,7 @@ bash ./scripts/adaptation/few_shot/timer_xl_etth1.sh
 - TTMs: https://huggingface.co/ibm-research/ttm-research-r2
 
 > [!NOTE]
-> LTMs are still small in compared to foundation models of other modalities. We prefer to include and implement models requiring affordable training resources as efficiently as possible (for example, using several RTX 4090s or A100s).
+> LTMs are still small in compared to foundation models of other modalities (for example, it is okay to use RTX 4090s for adaptation or A100s for pre-training).
 
 ## Citation
 
@@ -120,3 +119,4 @@ We appreciate the following GitHub repos a lot for their valuable code and effor
 If you have any questions or want to use the code, feel free to contact:
 * Yong Liu (liuyong21@mails.tsinghua.edu.cn)
 * Guo Qin (qinguo24@mails.tsinghua.edu.cn)
+* Haixuan Liu (liuhaixu21@mails.tsinghua.edu.cn)
