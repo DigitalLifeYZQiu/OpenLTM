@@ -1,8 +1,12 @@
 # OpenLTM
 
-OpenLTM is a open codebase aiming to provide a pipeline to develop and evaluate large time-series models.
+OpenLTM is an open codebase aiming to provide a pipeline to develop and evaluate large time-series models.
 
 > For deep time series models and task-specific benchmarks, we recommend [Time-Series-Library](https://github.com/thuml/Time-Series-Library) and this comprehensive [Survey](https://arxiv.org/abs/2407.13278).
+
+:triangular_flag_on_post: **News** (2025.5) [Sundial](https://arxiv.org/abs/2502.00816), a family of generative time series foundation models has been accepted as **ICML 2025 Spotlight** (Top 2.6%). Get your first zero-shot predictions in one second! [[GitHub]](https://github.com/thuml/Sundial), [[HuggingFace]](https://huggingface.co/thuml/sundial-base-128m). 
+
+:triangular_flag_on_post: **News** (2025.05) We release a pre-trained checkpoint of [Timer](https://arxiv.org/abs/2410.04803) for model adaptation. This [notebook](./load_pth_ckpt.ipynb) shows how to load and use the checkpoint :)
 
 :triangular_flag_on_post: **News** (2025.04) Many thanks for the implementation of [TTMs](https://arxiv.org/pdf/2401.03955) and other LLM4TS methods from [frndtls](https://github.com/frndtls).
 
@@ -12,7 +16,7 @@ OpenLTM is a open codebase aiming to provide a pipeline to develop and evaluate 
 
 ## What is LTM
 
-LTM (**L**arge **T**ime-Series **M**odel) is a series of scalable deep models built on foundation backbones (e.g. Transformers) and large-scale pre-training, which will be applied to a variety of time series data and diverse downstream tasks. For more information, here we list some related slides: [[CN]](https://cloud.tsinghua.edu.cn/f/1f3fdcf3304c4a82bc13/), [[Eng]](https://cloud.tsinghua.edu.cn/f/8a585e37f45f46fd97d0/).
+LTM (**L**arge **T**ime-Series **M**odel) is a series of scalable deep models built on foundation backbones (e.g., Transformers) and large-scale pre-training, which will be applied to a variety of time series data and diverse downstream tasks. For more information, here we list some related slides: [[CN]](https://cloud.tsinghua.edu.cn/f/1f3fdcf3304c4a82bc13/), [[Eng]](https://cloud.tsinghua.edu.cn/f/8a585e37f45f46fd97d0/).
 
 
 ## Model Checklist
@@ -26,6 +30,7 @@ LTM (**L**arge **T**ime-Series **M**odel) is a series of scalable deep models bu
 - [x] **Time-LLM**: . Time-LLM: Time Series Forecasting by Reprogramming Large Language Models. [[ICLR 2024]](https://arxiv.org/abs/2310.01728), [[Code]](https://github.com/KimMeen/Time-LLM)
 - [x] **AutoTimes**: Autoregressive Time Series Forecasters via Large Language Models. [[NeurIPS 2024]](https://arxiv.org/abs/2402.02370), [[Code]](https://github.com/thuml/AutoTimes)
 - [ ] LLMTime: Large Language Models Are Zero-Shot Time Series Forecasters. [[NeurIPS 2023]](https://arxiv.org/abs/2310.07820), [[Code]](https://github.com/ngruver/llmtime)
+- [ ] Sundial: A Family of Highly Capable Time Series Foundation Models. [[ICML 2025]](https://arxiv.org/abs/2502.00816)
 - [ ] Chronos: Learning the Language of Time Series. [[TMLR 2024]](https://arxiv.org/abs/2403.07815), [[Code]](https://github.com/amazon-science/chronos-forecasting)
 - [ ] Time-MoE: Billion-Scale Time Series Foundation Models With Mixture Of Experts. [[ICLR 2025]](https://arxiv.org/abs/2409.16040), [[Code]](https://github.com/Time-MoE/Time-MoE)
 - [ ] A Decoder-Only Foundation Model for Time-Series Forecasting. [[ICML 2024]](https://arxiv.org/abs/2310.10688), [[Code]](https://github.com/google-research/timesfm)
@@ -41,15 +46,19 @@ pip install -r requirements.txt
 
 2. Place downloaded data in the folder ```./dataset```. Here is a [dataset summary](./figures/datasets.png).
 
-- For univariate pre-training:
-  * [UTSD](https://huggingface.co/datasets/thuml/UTSD) contains 1 billiion time points for large-scale pre-training (in numpy format): [[Download]](https://cloud.tsinghua.edu.cn/f/93868e3a9fb144fe9719/
+- For univariate pre-training (skip this step if you use a pre-trained checkpoint):
+  * [UTSD](https://huggingface.co/datasets/thuml/UTSD) contains 1 billion time points for large-scale pre-training (in numpy format): [[Download]](https://cloud.tsinghua.edu.cn/f/93868e3a9fb144fe9719/
 ).
-  * [ERA5-Familiy](https://www.ecmwf.int/en/forecasts/dataset/ecmwf-reanalysis-v5) (40-year span, thousands of variables) for domain-specific model: [[Download]](https://cloud.tsinghua.edu.cn/f/7fe0b95032c64d39bc4a/).
+  * [ERA5-Family](https://www.ecmwf.int/en/forecasts/dataset/ecmwf-reanalysis-v5) (40-year span, thousands of variables) for domain-specific model: [[Download]](https://cloud.tsinghua.edu.cn/f/7fe0b95032c64d39bc4a/).
 
-- For superwised training or modeling adaptation
+- For supervised training or modeling adaptation
   * Datasets from [TSLib](https://github.com/thuml/Time-Series-Library) : [[Download]](https://cloud.tsinghua.edu.cn/f/4d83223ad71047e28aec/).
 
-1. We provide some supervised training, pre-training and adaptation scripts under the folder `./scripts/`:
+3. Training from scratch or using our pre-trained checkpoint in the folder ```./checkpoints```
+
+- We provide the [checkpoint](https://arxiv.org/abs/2410.04803) pre-trained on 260B time points [[Download]](https://cloud.tsinghua.edu.cn/f/01c35ca13f474176be7b/).
+
+4. We provide some supervised training, pre-training, and adaptation scripts under the folder `./scripts/`:
 
 ```
 # Supervised training
@@ -77,16 +86,20 @@ bash ./scripts/adaptation/few_shot/timer_xl_etth1.sh
 - Include the newly added model in the `Exp_Basic.model_dict` of  `./exp/exp_basic.py`.
 - Create the corresponding scripts under the folder `./scripts`.
 
-To evaluate zero-shot forecasting of large time-series models. Here we list some resources:
+## Recommended Resources
+
+Here we list some resources of LTMs, which support out-of-box usage (e.g., zero-shot forecasting):
+
+- Sundial: https://huggingface.co/thuml/sundial-base-128m
+- Timer: https://huggingface.co/thuml/timer-base-84m
 - Chronos: https://huggingface.co/amazon/chronos-t5-base
 - Moirai: https://huggingface.co/Salesforce/moirai-1.0-R-base
 - TimesFM: https://huggingface.co/google/timesfm-1.0-200m
-- Timer-XL: https://huggingface.co/thuml/timer-base-84m
 - Time-MoE: https://huggingface.co/Maple728/TimeMoE-50M
 - TTMs: https://huggingface.co/ibm-research/ttm-research-r2
 
 > [!NOTE]
-> LTMs are still small in compared to foundation models of other modalities (for example, it is okay to use RTX 4090s for adaptation or A100s for pre-training).
+> LTMs are still small compared to foundation models of other modalities (for example, it is okay to use RTX 4090s for adaptation or A100s for pre-training).
 
 ## Citation
 
